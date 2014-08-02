@@ -1,0 +1,10 @@
+.pydev
+.pydevproject
+.project
+*.pyc
+.settings/
+*.log
+*~
+*.swp
+local_constant.py
+supervisord-dev.conf
