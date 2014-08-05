@@ -10,6 +10,7 @@ import tornado.options
 import tornado.httpserver
 from tornado.ioloop import IOLoop
 from timer.log import LocalLog
+os.environ['DJANGO_SETTINGS_MODULE'] = 'constant'
 
 logger = logging.getLogger('Robot')
 logger.propagate = False
@@ -23,11 +24,13 @@ local_log_hdl.setFormatter(log_format)
 logger.addHandler(local_log_hdl)
 tornado.options.define("port", default=8888, help=u"指定启动端口", type=int)
 
-from handler.base import TestHandler
+from django.conf import settings
+
+from handler.novel import NovelHandler
 
 
 urls = [
-    (r'/', TestHandler),
+    (r'/novel', NovelHandler),
 ]
 
 class Application(tornado.web.Application):
