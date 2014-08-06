@@ -8,30 +8,37 @@ from database.models import Novel
 logger = logging.getLogger('Robot.Novel')
 
 class NovelHandler(BaseHandler):
-    '小说'
+    'novel'
     
-    SUPPORTED_METHODS = ['ADD']
+    SUPPORTED_METHODS = ['ADD', 'UPDATE']
 
-    @transaction.commit_manually
+    @transaction.commit_on_success
     def add(self):
-        '添加小说'
+        '添加novel'
         
         name = self.get_argument('name')
         if Novel.objects.filter(name=name).exists():
             return self.finish({'result': 1, 'msg': u'已经创建'})
+        Novel.objects.create(**{
+            'id': self.gen_uuid(),
+            'name': name,
+            'createtime': int(time.time()),
+            'status': 0
+        })
+        return self.finish({'result': 0, 'msg': u''})
+    
+    @transaction.commit_on_success
+    def update(self):
+        '修改novel'
+
         try:
-            Novel.objects.create(**{
-                'id': self.gen_uuid(),
-                'name': name,
-                'create': int(time.time()),
-                'status': 0
-            })
+            novel = Novel.objects.select_for_update().get(id=self.get_argument('id'))
         except:
-            import traceback
-            traceback.print_exc()
-            logger.error('ADD NOVEL ERROR', exc_info=1)
-            transaction.rollback()
-            return self.finish({'result': -1, 'msg': u'novel 添加失败'})
-        else:
-            transaction.commit()
-            return self.finish({'result': 0, 'msg': u''})
+            return self.finish({'result': 1, 'msg': u'id参数错误'})
+        status = int(self.get_argument('status', ''))
+        if not status in Novel.NOVEL_STATUSES:
+            return self.finish({'result': 2, 'msg': u'status参数错误'})
+        novel.status, novel.updatetime = status, int(time.time())
+        novel.save()
+        self.finish({'result': 0, 'msg': u''})
+        

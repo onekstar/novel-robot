@@ -2,9 +2,17 @@
 import constant
 import os, sys
 sys.path.insert(0, constant.PROJECT_DIR)
+import time
+import logging
 import tornado.web
 from tornado.testing import AsyncHTTPTestCase
 import server
+server.logger = logging.getLogger('Robot')
+stream_hd = logging.StreamHandler()
+stream_hd.setFormatter(server.log_format)
+server.logger.addHandler(stream_hd)
+server.logger.setLevel(logging.WARNING)
+
 from urllib import urlencode
 from tornado.escape import utf8
 from tornado.httpclient import HTTPRequest as TornadoHTTPRequest
@@ -16,6 +24,9 @@ from lib import base_util
 import copy
 import tornado.gen
 import urllib
+import uuid
+
+from database.models import Novel
 
 class BaseTestCase(AsyncHTTPTestCase):
     '测试基类'
@@ -23,6 +34,7 @@ class BaseTestCase(AsyncHTTPTestCase):
     def setUp(self):
         
         AsyncHTTPTestCase.setUp(self)
+        Novel.objects.all().delete()
     
     def get_app(self):
 
@@ -56,3 +68,16 @@ class BaseTestCase(AsyncHTTPTestCase):
 
     def pprint(self, data):
         base_util.pprint(data)
+    
+    def add_novel(self, name):
+        '添加一个novel'
+
+        id = uuid.uuid4().hex
+        Novel.objects.create(**{
+            'id': id,
+            'name': name, 
+            'createtime': int(time.time()),
+            'status': 0
+        })
+        return Novel.objects.get(id=id)
+
