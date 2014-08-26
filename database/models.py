@@ -27,6 +27,7 @@ class Chapter(models.Model):
     createtime = models.PositiveIntegerField(u'创建时间', default=0) 
     updatetime = models.PositiveIntegerField(u'更新时间', default=0)
     status = models.SmallIntegerField(u'状态', default=0)
+    content = models.TextField(u'内容', default='')
 
     class Meta(object):
         db_table = 'Chapter' 

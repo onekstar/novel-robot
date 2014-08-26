@@ -27,6 +27,8 @@ LOCAL_LOG_DIR = '/opt/logs/tornado/tudou' # 本地日志路径
 LOCAL_LOG_FLUSH_INTERVAL = 3 # 本地日志写入间隔（秒)
 COOKIE_SECRET = 'xl*0./*(_+()#@M<'
 
+TIEBA_CHAPTER_CLASS = 'd_post_content j_d_post_content'
+
 #尝试导入本地配置
 try:
     from local_constant import *
