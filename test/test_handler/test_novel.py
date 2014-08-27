@@ -12,7 +12,7 @@ class NovelHandlerTestCase(BaseTestCase):
     def test_add(self):
         '测试add方法'
 
-        params = {'name': '测试', '_method': 'add'}
+        params = {'name': '测试', 'rule': u'【择天记】.+', '_method': 'add'}
         result = self.common_json_request('/novel', params=params, method='POST')
         self.assertEqual(result['result'], 0)
     
@@ -44,7 +44,7 @@ class NovelHandlerTestCase(BaseTestCase):
         '测试update方法'
 
         novel = self.add_novel(u'测试')
-        params = {'id': novel.id, '_method': 'update', 'status': Novel.SERIAL_STATUS} 
+        params = {'id': novel.id, '_method': 'update', 'status': Novel.SERIAL_STATUS, 'rule': u'【择天记】.+'} 
         result = self.common_json_request('/novel', params=params, method='POST')
         self.assertEqual(result['result'], 0)
 

@@ -6,14 +6,14 @@ class TiebaService(BaseService):
 
     HOST = 'tieba.baidu.com'
 
-    def get_catalog_page(self, name, tp):
+    def get_catalog_page(self, name, pn):
         '获取目录页面'
 
         url = self.get_url('/f/good') 
         params = {
             'kw': name,
             'tab': 'good',
-            'tp': tp
+            'pn': pn 
         }
         return HTTPRequest(url, params=params, response_type='HTML', response_charset='gb18030')
     

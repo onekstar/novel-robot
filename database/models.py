@@ -24,7 +24,9 @@ class Chapter(models.Model):
     '小说章节'
 
     id = models.CharField(u'id', max_length=32, primary_key=True) 
-    title = models.CharField(u'名称', max_length=255, unique=True)
+    novel = models.CharField(u'novel id', max_length=32) 
+    title = models.CharField(u'名称', max_length=255)
+    pageid = models.CharField(u'贴吧id', max_length=32, unique=True)
     createtime = models.PositiveIntegerField(u'创建时间', default=0) 
     updatetime = models.PositiveIntegerField(u'更新时间', default=0)
     status = models.SmallIntegerField(u'状态', default=0)

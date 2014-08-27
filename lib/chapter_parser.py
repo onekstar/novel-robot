@@ -8,9 +8,9 @@ import constant
 class ChapterParser:
     '章节解析器'
 
-    def __init__(self, pageid):
+    def __init__(self, chapter):
         
-        self.pageid = pageid 
+        self.chapter = chapter 
         self.tieba_service = TiebaService()
 
     @tornado.gen.coroutine
@@ -25,7 +25,7 @@ class ChapterParser:
     def _get_html(self):
         '获取html'
 
-        request = self.tieba_service.get_text_page(self.pageid)
+        request = self.tieba_service.get_text_page(self.chapter.pageid)
         response = yield TiebaService.async_fetch(request)
         raise tornado.gen.Return(response)
     

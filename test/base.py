@@ -26,7 +26,7 @@ import tornado.gen
 import urllib
 import uuid
 
-from database.models import Novel
+from database.models import Novel, Chapter
 
 class BaseTestCase(AsyncHTTPTestCase):
     '测试基类'
@@ -35,6 +35,7 @@ class BaseTestCase(AsyncHTTPTestCase):
         
         AsyncHTTPTestCase.setUp(self)
         Novel.objects.all().delete()
+        Chapter.objects.all().delete()
     
     def get_app(self):
 
