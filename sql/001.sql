@@ -2,6 +2,7 @@ BEGIN;
 CREATE TABLE `Novel` (
     `id` varchar(32) NOT NULL PRIMARY KEY,
     `name` varchar(255) NOT NULL UNIQUE,
+    `rule` varchar(255) NOT NULL,
     `createtime` integer UNSIGNED NOT NULL,
     `updatetime` integer UNSIGNED NOT NULL,
     `status` smallint NOT NULL

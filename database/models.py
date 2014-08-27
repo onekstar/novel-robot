@@ -12,6 +12,7 @@ class Novel(models.Model):
 
     id = models.CharField(u'id', max_length=32, primary_key=True) 
     name = models.CharField(u'名称', max_length=255, unique=True) 
+    rule = models.CharField(u'章节标题规则', max_length=255, default='.+')
     createtime = models.PositiveIntegerField(u'创建时间', default=0) 
     updatetime = models.PositiveIntegerField(u'更新时间', default=0)
     status = models.SmallIntegerField(u'状态', default=0)

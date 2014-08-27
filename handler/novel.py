@@ -17,11 +17,13 @@ class NovelHandler(BaseHandler):
         '添加novel'
         
         name = self.get_argument('name')
+        rule = self.get_argument('rule', '.+')
         if Novel.objects.filter(name=name).exists():
             return self.finish({'result': 1, 'msg': u'已经创建'})
         Novel.objects.create(**{
             'id': self.gen_uuid(),
             'name': name,
+            'rule': rule,
             'createtime': int(time.time()),
             'status': 0
         })
@@ -36,6 +38,9 @@ class NovelHandler(BaseHandler):
         except:
             return self.finish({'result': 1, 'msg': u'id参数错误'})
         status = int(self.get_argument('status', ''))
+        rule = self.get_argument('rule', '')
+        if rule:
+            novel.rule = rule
         if not status in Novel.NOVEL_STATUSES:
             return self.finish({'result': 2, 'msg': u'status参数错误'})
         novel.status, novel.updatetime = status, int(time.time())
