@@ -3,7 +3,7 @@ import os
 import datetime
 import logging
 import tornado.ioloop
-logger = logging.getLogger('TudouTV.LocalLog')
+logger = logging.getLogger('Robot.LocalLog')
 
 class LocalLog(tornado.ioloop.PeriodicCallback):
 

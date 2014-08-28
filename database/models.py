@@ -6,9 +6,11 @@ class Novel(models.Model):
     '小说'
 
     INIT_STATUS = 0
-    SERIAL_STATUS = 1
-    COMPLETE_STATUS = 2
-    NOVEL_STATUSES = (INIT_STATUS, SERIAL_STATUS, COMPLETE_STATUS)
+    SERIAL_STATUS = 1 #连载中
+    COMPLETE_STATUS = 2 #连载完毕
+    SYNC_STATUS = 3 #更新中
+    NOVEL_STATUSES = (INIT_STATUS, SERIAL_STATUS, COMPLETE_STATUS, SYNC_STATUS)
+    NEED_SYNC_STATUS = (INIT_STATUS, SERIAL_STATUS)
 
     id = models.CharField(u'id', max_length=32, primary_key=True) 
     name = models.CharField(u'名称', max_length=255, unique=True) 
