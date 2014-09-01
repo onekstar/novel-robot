@@ -29,7 +29,7 @@ COOKIE_SECRET = 'xl*0./*(_+()#@M<'
 
 TIEBA_CHAPTER_CLASS = 'd_post_content j_d_post_content'
 
-SYNC_INTERVAL_TIME = 3600 #更新间隔
+NOVEL_SYNC_INTERVAL = 5#更新间隔
 
 #尝试导入本地配置
 try:

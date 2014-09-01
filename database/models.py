@@ -8,9 +8,9 @@ class Novel(models.Model):
     INIT_STATUS = 0
     SERIAL_STATUS = 1 #连载中
     COMPLETE_STATUS = 2 #连载完毕
-    SYNC_STATUS = 3 #更新中
-    NOVEL_STATUSES = (INIT_STATUS, SERIAL_STATUS, COMPLETE_STATUS, SYNC_STATUS)
-    NEED_SYNC_STATUS = (INIT_STATUS, SERIAL_STATUS)
+    ON_SYNC_STATUS = 3 #更新中
+    NOVEL_STATUSES = (INIT_STATUS, SERIAL_STATUS, COMPLETE_STATUS, ON_SYNC_STATUS)
+    WAITING_SYNC_STATUS = (INIT_STATUS, SERIAL_STATUS)
 
     id = models.CharField(u'id', max_length=32, primary_key=True) 
     name = models.CharField(u'名称', max_length=255, unique=True) 
@@ -24,6 +24,10 @@ class Novel(models.Model):
 
 class Chapter(models.Model):
     '小说章节'
+
+    UN_SYNC_STATUS = 0
+    HAS_SYNC_STATUS = 1
+    ON_SYNC_STATUS = 2
 
     id = models.CharField(u'id', max_length=32, primary_key=True) 
     novel = models.CharField(u'novel id', max_length=32) 

@@ -1,5 +1,4 @@
 #coding:utf-8
-#coding:utf-8
 import tornado.testing
 from test.base import BaseTestCase
 from database.models import Novel 
@@ -21,7 +20,6 @@ class CatalogParserTestCase(BaseTestCase):
             self.assertTrue(c_list)
             rule = re.compile(novel.rule)
             for c in c_list:
-                print c.title
                 self.assertTrue(c.pageid)
                 self.assertTrue(rule.match(c.title))
     

@@ -10,7 +10,7 @@ def gen_suite():
     name_r = re.compile('^test_.*\.py$')
     suite = unittest.TestSuite()
     loader = unittest.defaultTestLoader.loadTestsFromModule
-    dirs = ('test_handler', 'test_lib')
+    dirs = ('test_handler', 'test_lib', 'test_timer')
     for dir in dirs:
         path = os.path.join(constant.PROJECT_DIR, 'test', dir)
         files = os.listdir(path)

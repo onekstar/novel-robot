@@ -43,5 +43,3 @@ class CatalogParser:
             title = ele.text
             chapter_list.append(Chapter(novel=self.novel.id, title=title, pageid=pageid))
         return chapter_list
-            
-    

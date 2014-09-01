@@ -1,11 +1,12 @@
 #coding:utf-8
+import time
 from tornado.ioloop import IOLoop
 from tornado.web import RequestHandler, HTTPError
-import uuid
 import logging
 import constant
 import functools
 from django.db import connections
+from lib import base_util
 
 logger = logging.getLogger('Robot.BaseHandler')
 
@@ -34,7 +35,7 @@ class BaseHandler(RequestHandler):
     def gen_uuid(self):
         '生成uuid'
 
-        return uuid.uuid4().hex
+        return base_util.genid()
     
 class TestHandler(BaseHandler):
     
