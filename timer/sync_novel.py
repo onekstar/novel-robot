@@ -32,7 +32,7 @@ class SyncNovelTimer:
                 yield self._sync_novel()
             except Exception as e:
                 self._change_novel_status(Novel.SERIAL_STATUS)
-                logger.error('sync novel error %s|' %(novel.id), exc_info=1)
+                logger.error('sync novel error %s|%s|' %(self.novel.id, self.novel.name), exc_info=1)
             yield tornado.gen.Task(io_loop.add_timeout, int(time.time()) + constant.NOVEL_SYNC_INTERVAL)
     
     def _change_novel_status(self, status):

@@ -18,8 +18,8 @@ class ChapterParser:
         '解析'
         
         self.html = yield self._get_html()
-        chapter = self._parse_html()
-        raise tornado.gen.Return(chapter)
+        self.chapter.content = self._parse_html()
+        raise tornado.gen.Return(1)
     
     @tornado.gen.coroutine
     def _get_html(self):
@@ -37,4 +37,5 @@ class ChapterParser:
         if len(divs) > 1:
             divs = filter(lambda x: len(x.text_content()) > 500, divs)
         divs = [lxml.html.tostring(div, encoding='utf-8').decode('utf-8') for div in divs]
-        return Chapter(content=''.join([div[div.find('>') + 1:-6].strip() for div in divs]))
+        content = ''.join([div[div.find('>') + 1:-6].strip() for div in divs])
+        return content

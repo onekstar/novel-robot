@@ -13,7 +13,7 @@ class ChapterParserTestCase(BaseTestCase):
 
         chapter = Chapter(pageid='3255459308')
         parser = ChapterParser(chapter)
-        chapter = yield parser.execute()
+        yield parser.execute()
         self.assertTrue(chapter.content.startswith(u'第一百二十三章 燎原'))
     
     @tornado.testing.gen_test
@@ -22,7 +22,7 @@ class ChapterParserTestCase(BaseTestCase):
 
         chapter = Chapter(pageid='3253316379')
         parser = ChapterParser(chapter)
-        chapter = yield parser.execute()
+        yield parser.execute()
         self.assertTrue(chapter.content.index(u'石昊是从一座巨城离开的'))
 
 if __name__ == '__main__':
