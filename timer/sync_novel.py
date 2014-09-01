@@ -48,12 +48,14 @@ class SyncNovelTimer:
 
         logger.info('start sync novel %s|%s' %(self.novel.id, self.novel.name))
         self.pageids = set(Chapter.objects.filter(novel=self.novel.id).values_list('pageid', flat=True))
+        parser = CatalogParser(self.novel, 0)
+        total_count = yield parser.get_total_count()
         offset = 0
         while True:
+            if offset > total_count:
+                break
             parser = CatalogParser(self.novel, offset)
             chapter_list = yield parser.execute()
-            if not chapter_list:
-                break
             finished = self._save_chapters(chapter_list)
             if finished:
                 break

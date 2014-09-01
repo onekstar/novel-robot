@@ -23,6 +23,15 @@ class CatalogParserTestCase(BaseTestCase):
                 self.assertTrue(c.pageid)
                 self.assertTrue(rule.match(c.title))
     
+    @tornado.testing.gen_test
+    def test_get_total_count(self):
+        
+        novel_list = [Novel(id='aaa', name=u'择天记', rule=ur'^【择天记】.+第.+章.+$'), Novel(id='bbb', name=u'完美世界小说', rule=ur'^完美世界 第.+章[^(山寨）)]+$')]
+        for novel in novel_list:
+            parser = CatalogParser(novel, 0) 
+            count = yield parser.get_total_count()
+            self.assertTrue(count)
+
 if __name__ == '__main__':
     import unittest
     unittest.main()

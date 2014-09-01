@@ -18,8 +18,20 @@ class CatalogParser:
         '执行解析'
 
         self.html = yield self._get_html()
+        if not self.html:
+            raise Exception('GET HTML PAGE ERROR|%s|%s' %(self.novel.id, self.novel.name))
         chapter_list = self._parse_html()
         raise tornado.gen.Return(chapter_list)
+    
+    @tornado.gen.coroutine
+    def get_total_count(self):
+        '获取帖子总数'
+
+        self.html = yield self._get_html()
+        doc = lxml.html.fromstring(self.html)
+        div = doc.find_class('th_footer_l')[0]
+        count = int(div.text_content().split(u'共有精品数', 1)[1][:-1])
+        raise tornado.gen.Return(count)
     
     @tornado.gen.coroutine
     def _get_html(self):

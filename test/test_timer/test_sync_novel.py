@@ -8,8 +8,8 @@ from timer.sync_novel import SyncNovelTimer
 class SyncNovelTimerTestCase(BaseTestCase):
     '小说同步定时器测试用例'
 
-    @tornado.testing.gen_test(timeout=30)
-    def skip_test_sync_novel(self):
+    @tornado.testing.gen_test(timeout=300)
+    def test_sync_novel(self):
         '测试_sync_novel方法'
 
         timer = SyncNovelTimer()
