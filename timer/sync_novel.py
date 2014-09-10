@@ -3,7 +3,6 @@ import time
 import logging
 import tornado.gen
 import tornado.ioloop
-import server
 from database.models import Novel, Chapter
 import constant
 from tornado.ioloop import IOLoop
@@ -26,6 +25,7 @@ class SyncNovelTimer:
         while True:
             self.novel = self.query_set.order_by('updatetime', 'createtime').first()
             if self.novel is None:
+                yield tornado.gen.Task(io_loop.add_timeout, int(time.time()) + constant.NOVEL_SYNC_INTERVAL)
                 continue
             try:
                 self._change_novel_status(Novel.ON_SYNC_STATUS)
@@ -33,7 +33,6 @@ class SyncNovelTimer:
             except Exception as e:
                 self._change_novel_status(Novel.SERIAL_STATUS)
                 logger.error('sync novel error %s|%s|' %(self.novel.id, self.novel.name), exc_info=1)
-            yield tornado.gen.Task(io_loop.add_timeout, int(time.time()) + constant.NOVEL_SYNC_INTERVAL)
     
     def _change_novel_status(self, status):
         '修改novel状态'
@@ -78,15 +77,3 @@ class SyncNovelTimer:
             chapter.status = Chapter.UN_SYNC_STATUS 
             chapter.save()
         return finished
-
-if __name__ == '__main__':
-    
-    server.logger = logging.getLogger('Robot')
-    stream_hd = logging.StreamHandler()
-    stream_hd.setFormatter(server.log_format)
-    server.logger.addHandler(stream_hd)
-    server.logger.setLevel(logging.INFO)
-
-    timer = SyncNovelTimer()
-    timer.start()
-    io_loop.start()

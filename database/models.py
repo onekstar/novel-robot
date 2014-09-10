@@ -29,7 +29,7 @@ class Chapter(models.Model):
     HAS_SYNC_STATUS = 1
     ON_SYNC_STATUS = 2
 
-    WAITING_SYNC_STATUS = (UN_SYNC_STATUS)
+    WAITING_SYNC_STATUS = (UN_SYNC_STATUS, )
 
     id = models.CharField(u'id', max_length=32, primary_key=True) 
     novel = models.CharField(u'novel id', max_length=32) 

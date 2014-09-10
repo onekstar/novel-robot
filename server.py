@@ -26,6 +26,9 @@ tornado.options.define("port", default=8888, help=u"指定启动端口", type=in
 
 from django.conf import settings
 
+from timer.sync_chapter import SyncChapterTimer
+from timer.sync_novel import SyncNovelTimer
+
 from handler.novel import NovelHandler
 
 
@@ -106,6 +109,8 @@ if __name__ == '__main__':
     # 定时保存本地日志
     LocalLog(1000 * constant.LOCAL_LOG_FLUSH_INTERVAL,
             constant.LOCAL_LOG_DIR, options.port).start()
+    SyncNovelTimer().start()
+    SyncChapterTimer().start()
     logger.info('Server Starting at port %s...' %options.port)
     tornado.ioloop.IOLoop.instance().set_blocking_log_threshold(10)
     tornado.ioloop.IOLoop.instance().start()

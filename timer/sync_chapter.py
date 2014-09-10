@@ -6,6 +6,7 @@ from tornado.ioloop import IOLoop
 from django.db import transaction
 from database.models import Novel, Chapter
 from lib.chapter_parser import ChapterParser
+import constant
 
 io_loop = IOLoop.instance()
 logger = logging.getLogger('Robot.SyncChapterTimer')
@@ -20,6 +21,7 @@ class SyncChapterTimer:
         while True:
             self.chapter = self.query_set.order_by('createtime', 'updatetime').first()
             if self.chapter is None:
+                yield tornado.gen.Task(io_loop.add_timeout, int(time.time()) + constant.CHAPTER_SYNC_INTERVAL)
                 continue
             try:
                 self._change_chapter_status(Chapter.ON_SYNC_STATUS)
@@ -27,7 +29,6 @@ class SyncChapterTimer:
             except Exception as e:
                 self._change_chapter_status(Chapter.UN_SYNC_STATUS)
                 logger.error('sync novel error %s|' %(self.chapter.id), exc_info=1)
-            yield tornado.gen.Task(io_loop.add_timeout, int(time.time()) + constant.NOVEL_SYNC_INTERVAL)
     
     def _change_chapter_status(self, status):
         '更新chapter status字段'
