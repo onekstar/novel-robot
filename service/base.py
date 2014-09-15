@@ -134,10 +134,10 @@ class BaseService:
 
         if response.error:
             body = response.body  or ''
-            logger.error('RESPONSE ERROR|%s|%s|%s|%s|%s' %(cls.__name__, request, response.request_time, response.error, body[:512]))
+            logger.error('RESPONSE ERROR|%s|%s|%s|%s' %(cls.__name__, request, response.request_time, response.error))
         else:
             body = response.body
-            logger.info('RESPONSE OK|%s|%s|%s|%s|' %(cls.__name__, request, response.request_time, body[:512]))
+            logger.info('RESPONSE OK|%s|%s|%s|' %(cls.__name__, request, response.request_time))
         return body
 
     @staticmethod

@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>土豆TV-APP API文档</title>
+        <link href="{{ static_url('css/bootstrap/css/bootstrap-responsive.tudou.css') }}" rel='stylesheet'>
+        <link href="{{ static_url('css/bootstrap/css/bootstrap.min.css') }}" rel='stylesheet'>
+        <link href="{{ static_url('css/main.css') }}" rel='stylesheet'>
+        <script src="{{ static_url('js/jquery-1.4.4.min.js') }}"></script>
+    </head>
+    <body style="padding-left:20px;">
+        <ul id='api-nav' class="nav  nav-stacked">
+            <h4>分类：
+                <select id='type_select'>
+                    <option value="">全部</option>
+                    <option value=0> 小说</option>
+                    <option value=1> 章节</option>
+                </select>
+            </h4>
+            {% for api in apis %}
+            <li>
+                <h5 class='nav-h5'>
+                    <a href="#mo-{{ api["name"] }}" data='{{ api["name"] }}' class='api-link'>
+                        <i class="icon-map-marker"></i>
+                        {{ api['name'] }}
+                     </a>
+                </h5>
+            </li>
+            {% end %}
+        </ul>
+        {% for api in apis %}
+        <h3> 
+            <a style="cursor:pointer;" class="api_name" value='{{ api["name"] }}' name='mo-{{ api["name"] }}'>|{{ api['name'] }}({{ api['url'] }})</a> 
+        </h3>
+        <div class='api' id='{{ api["name"] }}' value='{{ api["name"] }}' url='{{ api["url"] }}'method='{{ api['method'] }}'>
+            <p class='text-warning'><b>请求方式：{{ api['method'] }} </b><p>
+            <p class='text-warning'>描述：{{ api['desc'] }} <p>
+            {% if api['params'] %}
+            <table class='params'>
+                <tbody>
+                    <tr>
+                        <th title='全选'> <input type='checkbox' class='checkall-box' value='{{ api["name"] }}'> </th>
+                        <th> NAME </th>
+                        <th> REQUIRED </th>
+                        <th> DEFAULT </th>
+                        <th> EXAMPLE</th>
+                        <th> DESC </th>
+                    </tr>
+                    {% for param in api['params'] %}
+                    <tr class='param-tr'>
+                        <td title='选中提交'>
+                            {% if param['required'] %}
+                            <input type='checkbox' disabled='true' checked='true' class='param-checkbox' title='必要参数'> 
+                            {% else %}
+                            <input type='checkbox' class='param-checkbox' title='可选参数'> 
+                            {% end %}
+                        </td>
+                        <td>{{  param['name'] }}</td>
+                        <td>{{  param['required'] }}</td>
+                        <td>{{  param['default'] }}</td>
+                        <td><input class='param-input' value='{{  param['exam'] }}' name='{{ param['name'] }}'></td>
+                        <td>{% raw param['desc'] %}</td>
+                    </tr>
+                {% end %}
+                </tbody>
+            </table>
+            {% end %}
+            <p class='text-warning'><b>注意：{% raw api['memo'] %} </b><p>
+            <p class="api_test">
+                <button type="button" class="btn btn-success btn-request" value='{{ api["name"] }}'>Request</button>
+                <span class='text-info request-time'><span>
+            </p>
+            <span class="text-info request-url" title='新标签打开'></span>
+            <pre class='response-pre'>
+            </pre>
+        </div>
+        {% end %}
+        <script type='text/javascript'>
+            var get_params = function(api_div){
+                var param_tables = api_div.children('table.params')
+                var params = {}
+                if (param_tables.length > 0){
+                    var param_table = $(param_tables[0])
+                    param_table.find('tr.param-tr').each(function(){
+                        var checkbox = $($(this).find('input.param-checkbox')[0]);
+                        if (checkbox.attr('checked')){
+                            $(this).find('input.param-input').each(function(){
+                                params[$(this).attr('name')] = $(this).attr('value');
+                            });
+                        }
+                    });
+                }
+                return params
+            };
+            var request = function(params, api_div){
+                var start = new Date();
+                var url = api_div.attr('url');
+                $.ajax({
+                    'type': api_div.attr('method'),
+                    'dataType':'json',
+                    'url': url,
+                    'data': params,
+                    'success':function(data){
+                        api_div.find('.request-time').each(function(){
+                            $(this).html(new Date()-start + '毫秒');
+                        });
+                        var formated_data = syntaxHighlight(data);
+                        show_response(api_div, formated_data);
+                    },
+                    'error':function(xhr, textStatus, errorThrown){
+                        api_div.find('.request-time').each(function(){
+                            $(this).html('发生错误');
+                        });
+                        var data = xhr.status + '\n' + xhr.responseText;
+                        show_response(api_div, data);
+                    }
+                });
+                api_div.find('.request-time').each(function(){
+                    $(this).html('正在获取...');
+                });
+                api_div.find('.request-url').each(function(){
+                    var path = url + '?' + $.param(params) 
+                    $(this).html("<a href='" + path + "' target='blank'>" + path + "</a>");
+                });
+            };
+            var syntaxHighlight = function(json) {
+                if (typeof json != 'string') {
+                     json = JSON.stringify(json, undefined, 4);
+                }
+                return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                    var cls = 'number';
+                    if (/^"/.test(match)) {
+                        if (/:$/.test(match)) {
+                            //"key"
+                            cls = 'text-error';
+                        } else {
+                            //"string"
+                            cls = 'text-info';
+                        }
+                    } else if (/true|false/.test(match)) {
+                        cls = 'text-warning';
+                    } else if (/null/.test(match)) {
+                        cls = 'text-success';
+                    }
+                    return '<span class="' + cls + '">' + match + '</span>';
+                });
+            };
+            var show_response = function(api_div, data){
+                response_pre = $(api_div.find('.response-pre')[0])
+                response_pre.html(data);
+            };
+            var get_api_div_by_url = function(url){
+                var id = url.replace(/\//g, '--');
+                var api_div = $($('#'+id)[0]);
+                return api_div;
+            };
+            $(function(){
+                $('.api').hide();
+                $('.btn-request').click(function(){
+                    var api_div = get_api_div_by_url($(this).attr('value'));
+                    var params=get_params(api_div);
+                    request(params, api_div);
+                });
+                $('.api_name').click(function(){
+                    var api_div = get_api_div_by_url($(this).attr('value'));
+                    api_div.fadeToggle(200);
+                });
+                $('.checkall-box').click(function(){
+                    var checkall_box = $(this);
+                    var url = checkall_box.attr('value');
+                    var api_div = get_api_div_by_url(url);
+                    api_div.find('.param-checkbox').each(function(){
+                        if(!$(this).attr('disabled')){
+                            $(this).attr('checked', checkall_box.attr('checked'));
+                        }
+                    });
+                });
+                $('.api-link').click(function(){
+                    var api_div = get_api_div_by_url($(this).attr('data'));
+                    $('.api').hide();
+                    api_div.show();
+                });
+                $('#type_select').val({{type}});
+                $('#type_select').change(function(){
+                    window.location= '?type=' + $(this).val();
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -30,10 +30,12 @@ from timer.sync_chapter import SyncChapterTimer
 from timer.sync_novel import SyncNovelTimer
 
 from handler.novel import NovelHandler
+from handler.doc import DocHandler
 
 
 urls = [
     (r'/novel', NovelHandler),
+    (r'/doc', DocHandler),
 ]
 
 class Application(tornado.web.Application):

@@ -1,0 +1,39 @@
+部署备忘
+
+1.0.0
+--------------------------------------------------
+1.修改nginx配置
+2.修改supervisord配置
+3.配置缓存时间
+
+1.1
+------------------------
+1. 注意修改hosts(login.jj.tudou.com)
+123.126.98.163  v2.tudou.com
+10.25.22.150 viewrecord.hgh.tudou.com
+10.108.89.77 api.tudou.com
+10.108.89.166  www.tudou.com
+10.108.89.79 trec.youku.com
+10.108.89.79  yun.tudou.com
+10.108.89.35 viewrecord.jj.tudou.com
+10.108.89.80 tvp.jj.tudou.com
+114.80.121.88 ct.v2.tudou.com
+10.108.89.56 s3-interface.jj.tudou.com
+10.108.89.59 cateservice.jj.tudou.com
+
+10.108.89.111   login.jj.tudou.com
+10.108.89.108   s3-portal.jj.tudou.com
+
+1.2
+------------------------
+CMS先上线
+
+1.3
+------------------------
+CMS先上线
+
+1.4
+------------------------
+-CMS先上线
+-修改nginx配置，重启
+

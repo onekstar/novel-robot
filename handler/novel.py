@@ -34,13 +34,11 @@ class NovelHandler(BaseHandler):
         '修改novel'
 
         try:
-            novel = Novel.objects.select_for_update().get(id=self.get_argument('id'))
+            novel = Novel.objects.select_for_update().get(name=self.get_argument('id'))
         except:
             return self.finish({'result': 1, 'msg': u'id参数错误'})
-        status = int(self.get_argument('status', ''))
-        rule = self.get_argument('rule', '')
-        if rule:
-            novel.rule = rule
+        status = int(self.get_argument('status', novel.status))
+        novel.rule = self.get_argument('rule', novel.rule)
         if not status in Novel.NOVEL_STATUSES:
             return self.finish({'result': 2, 'msg': u'status参数错误'})
         novel.status, novel.updatetime = status, int(time.time())
