@@ -23,9 +23,9 @@ class SyncNovelTimer:
 
         self.query_set = Novel.objects.filter(status__in=Novel.WAITING_SYNC_STATUS)
         while True:
-            self.novel = self.query_set.order_by('updatetime', 'createtime').first()
+            self.novel = self.query_set.filter(updatetime__lt=int(time.time())-constant.NOVEL_SYNC_INTERVAL).order_by('updatetime', 'createtime').first()
             if self.novel is None:
-                yield tornado.gen.Task(io_loop.add_timeout, int(time.time()) + constant.NOVEL_SYNC_INTERVAL)
+                yield tornado.gen.Task(io_loop.add_timeout, int(time.time()) + constant.NOVEL_SYNC_TIMER_INTERVAL)
                 continue
             try:
                 self._change_novel_status(Novel.ON_SYNC_STATUS)
@@ -73,7 +73,7 @@ class SyncNovelTimer:
                 finished = True 
                 break
             chapter.id = base_util.genid()
-            chapter.createtime = int(time.time())
+            chapter.createtime = int(time.time() * 1000)
             chapter.status = Chapter.UN_SYNC_STATUS 
             chapter.save()
         return finished

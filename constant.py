@@ -29,7 +29,8 @@ COOKIE_SECRET = 'xl*0./*(_+()#@M<'
 
 TIEBA_CHAPTER_CLASS = 'd_post_content j_d_post_content'
 
-NOVEL_SYNC_INTERVAL = 5#更新间隔
+NOVEL_SYNC_TIMER_INTERVAL = 5#更新间隔
+NOVEL_SYNC_INTERVAL = 300 #每个小说更新间隔
 CHAPTER_SYNC_INTERVAL = 10#更新间隔
 
 #尝试导入本地配置
