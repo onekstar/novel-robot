@@ -34,7 +34,7 @@ class NovelHandler(BaseHandler):
         '修改novel'
 
         try:
-            novel = Novel.objects.select_for_update().get(name=self.get_argument('id'))
+            novel = Novel.objects.select_for_update().get(id=self.get_argument('id'))
         except:
             return self.finish({'result': 1, 'msg': u'id参数错误'})
         status = int(self.get_argument('status', novel.status))
