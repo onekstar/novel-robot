@@ -43,6 +43,4 @@ class SyncChapterTimer:
 
         parser =  ChapterParser(self.chapter)
         yield parser.execute() 
-        self.chapter.updatetime = int(time.time())
-        self.chapter.status = Chapter.HAS_SYNC_STATUS
         self.chapter.save()

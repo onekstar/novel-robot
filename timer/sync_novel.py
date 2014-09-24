@@ -21,6 +21,7 @@ class SyncNovelTimer:
     def start(self):
         '开启'
 
+        Novel.objects.filter(status__in=Novel.ON_SYNC_STATUS, updatetime__lt=int(time.time())-constant.NOVEL_SYNC_TIMEOUT).update(status=Novel.SERIAL_STATUS) #重启超时的更新
         self.query_set = Novel.objects.filter(status__in=Novel.WAITING_SYNC_STATUS)
         while True:
             self.novel = self.query_set.filter(updatetime__lt=int(time.time())-constant.NOVEL_SYNC_INTERVAL).order_by('updatetime', 'createtime').first()
@@ -55,9 +56,7 @@ class SyncNovelTimer:
                 break
             parser = CatalogParser(self.novel, offset)
             chapter_list = yield parser.execute()
-            finished = self._save_chapters(chapter_list)
-            if finished:
-                break
+            self._save_chapters(chapter_list)
             offset += 50
         self.novel.updatetime = int(time.time())
         self.novel.status = Novel.SERIAL_STATUS
@@ -70,10 +69,9 @@ class SyncNovelTimer:
         finished = False
         for chapter in chapter_list:
             if chapter.pageid in self.pageids:
-                finished = True 
-                break
+                continue 
+            self.pageids.add(chapter.pageid)
             chapter.id = base_util.genid()
             chapter.createtime = int(time.time() * 1000)
             chapter.status = Chapter.UN_SYNC_STATUS 
             chapter.save()
-        return finished

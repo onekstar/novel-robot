@@ -31,10 +31,12 @@ from timer.sync_novel import SyncNovelTimer
 
 from handler.novel import NovelHandler
 from handler.doc import DocHandler
+from handler.chapter import ChapterHandler
 
 
 urls = [
     (r'/novel', NovelHandler),
+    (r'/chapter', ChapterHandler),
     (r'/doc', DocHandler),
 ]
 

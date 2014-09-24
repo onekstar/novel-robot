@@ -32,6 +32,7 @@ TIEBA_CHAPTER_CLASS = 'd_post_content j_d_post_content'
 NOVEL_SYNC_TIMER_INTERVAL = 5#更新间隔
 NOVEL_SYNC_INTERVAL = 300 #每个小说更新间隔
 CHAPTER_SYNC_INTERVAL = 10#更新间隔
+NOVEL_SYNC_TIMEOUT = 1 * 60 * 60 #更新超时时间
 
 #尝试导入本地配置
 try:

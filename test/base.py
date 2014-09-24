@@ -81,4 +81,15 @@ class BaseTestCase(AsyncHTTPTestCase):
             'status': 0
         })
         return Novel.objects.get(id=id)
+    
+    def add_chapter(self, novel, title, pageid):
+        '新增一个chapter'
+
+        id = uuid.uuid4().hex
+        Chapter.objects.create(**{
+            'id': id,
+            'title': title,
+            'pageid': pageid,
+        })
+        return Chapter.objects.get(id=id)
 

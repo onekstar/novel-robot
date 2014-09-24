@@ -1,4 +1,5 @@
 #coding:utf-8
+import time
 import lxml.html
 import tornado.gen
 from database.models import Chapter
@@ -19,6 +20,8 @@ class ChapterParser:
         
         self.html = yield self._get_html()
         self.chapter.content = self._parse_html()
+        self.chapter.status = Chapter.HAS_SYNC_STATUS
+        self.chapter.updatetime = int(time.time())
         raise tornado.gen.Return(1)
     
     @tornado.gen.coroutine
