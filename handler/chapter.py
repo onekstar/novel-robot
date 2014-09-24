@@ -8,8 +8,8 @@ from lib.chapter_parser import ChapterParser
 
 class ChapterHandler(BaseHandler):
     
-    @tornado.gen.coroutine
     @transaction.commit_on_success
+    @tornado.gen.coroutine
     def get(self):
         '获取chapter信息, 如果content为空则主动获取'
 
