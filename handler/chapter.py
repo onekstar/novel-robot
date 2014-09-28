@@ -8,6 +8,8 @@ from lib.chapter_parser import ChapterParser
 
 class ChapterHandler(BaseHandler):
     
+    SUPPORTED_METHODS = ['GET', 'GET_LIST']
+
     @transaction.commit_on_success
     @tornado.gen.coroutine
     def get(self):
@@ -31,3 +33,11 @@ class ChapterHandler(BaseHandler):
         parser = ChapterParser(self.chapter)
         yield parser.execute()
         self.chapter.save()
+    
+    def get_list(self):
+        '获取章节列表'
+
+        limit = int(self.get_argument('limit', '1000'))
+        offset = int(self.get_argument('offset', 0))
+        query_set = Chapter.objects.filter(novel=self.get_argument('novel')).order_by('pageid')
+        self.finish({'code': 0, 'data': list(query_set.values_list('id', 'title')[offset:offset+limit])})

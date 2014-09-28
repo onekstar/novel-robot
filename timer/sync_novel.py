@@ -21,9 +21,9 @@ class SyncNovelTimer:
     def start(self):
         '开启'
 
-        Novel.objects.filter(status__in=Novel.ON_SYNC_STATUS, updatetime__lt=int(time.time())-constant.NOVEL_SYNC_TIMEOUT).update(status=Novel.SERIAL_STATUS) #重启超时的更新
         self.query_set = Novel.objects.filter(status__in=Novel.WAITING_SYNC_STATUS)
         while True:
+            Novel.objects.filter(status=Novel.ON_SYNC_STATUS, updatetime__lt=int(time.time())-constant.NOVEL_SYNC_TIMEOUT).update(status=Novel.SERIAL_STATUS) #重启超时的更新
             self.novel = self.query_set.filter(updatetime__lt=int(time.time())-constant.NOVEL_SYNC_INTERVAL).order_by('updatetime', 'createtime').first()
             if self.novel is None:
                 yield tornado.gen.Task(io_loop.add_timeout, int(time.time()) + constant.NOVEL_SYNC_TIMER_INTERVAL)
@@ -68,7 +68,7 @@ class SyncNovelTimer:
 
         finished = False
         for chapter in chapter_list:
-            if chapter.pageid in self.pageids:
+            if int(chapter.pageid) in self.pageids:
                 continue 
             self.pageids.add(chapter.pageid)
             chapter.id = base_util.genid()

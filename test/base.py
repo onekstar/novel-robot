@@ -90,6 +90,7 @@ class BaseTestCase(AsyncHTTPTestCase):
             'id': id,
             'title': title,
             'pageid': pageid,
+            'novel': novel,
         })
         return Chapter.objects.get(id=id)
 

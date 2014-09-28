@@ -3,7 +3,7 @@ CREATE TABLE `Chapter` (
     `id` varchar(32) NOT NULL PRIMARY KEY,
     `novel` varchar(32) NOT NULL,
     `title` varchar(255) NOT NULL,
-    `pageid` varchar(32) UNIQUE NOT NULL,
+    `pageid` BIGINT UNSIGNED UNIQUE NOT NULL,
     `createtime` BIGINT UNSIGNED NOT NULL,
     `updatetime` INTEGER UNSIGNED NOT NULL,
     `status` smallint NOT NULL,
